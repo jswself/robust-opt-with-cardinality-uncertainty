@@ -1,0 +1,323 @@
+\documentclass[letterpaper, 10pt]{article}
+
+\usepackage[margin=1.0in]{geometry}
+
+\usepackage{amsmath} \allowdisplaybreaks
+\usepackage{amssymb}
+\usepackage{amsthm} \theoremstyle{definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{assumption}{Assumption}
+\newtheorem{proposition}{Proposition}
+\newtheorem{definition}{Definition}
+
+
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{appendix}
+\usepackage{hyperref}
+\usepackage{url}
+
+\newcommand{\email}[1]{{\href{mailto:#1}{\nolinkurl{#1}}}}
+
+
+\usepackage{xcolor}
+\newcommand{\note}[1]{{\Large\bf#1}}
+\newcommand{\bluenote}[1]{{\Large\color{blue}#1}}
+\newcommand{\rednote}[1]{{\Large\color{red}#1}}
+
+\usepackage{etoolbox}
+% To use, for example, \Ac for \mathcal{A}.  Requires "etoolbox" package
+\makeatletter
+\def\do#1{\@namedef{#1c}{\ensuremath{\mathcal{#1}}}}
+\docsvlist{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+\makeatother
+
+\def\Eb{\mathbb{E}}
+\def\Rb{\mathbb{R}}
+
+
+\usepackage{authblk}
+\renewcommand\Authfont{\sf\Large}
+\renewcommand\Affilfont{\rm\small}
+
+\title{A Strategy for solving the Robust Combinatorial Optimization Problems with Cardinality Constrained Uncertainty}
+\author{Taehan Lee\\
+	Department of Industrial and Information Systems Engineering\\
+	Chonbuk National University, Korea\\
+    \and
+    Changhyun Kwon\footnote{Corresponding Author: \email{chkwon@buffalo.edu}}\\Department of Industrial and Systems Engineering\\University at Buffalo, SUNY, USA\\
+	\and
+	Sangwoo Cho\footnote{Corresponding Author: \email{jswself@kaist.ac.kr}}\\Department of Industrial Systems and Engineering\\Korea Advanced Institute of Science and Technology, Daejeon, Korea}
+\date{September 23, 2024}
+
+%\usepackage{showlabels} 
+%\usepackage[final]{showlabels}
+
+
+
+\usepackage[]{natbib}
+
+\usepackage{enumerate}
+\def\Ac{\mathcal{A}}
+\def\Nc{\mathcal{N}}
+\def\Lc{\mathcal{L}}
+
+\usepackage{microtype}
+\usepackage{mathtools}
+\DeclarePairedDelimiter{\ceil}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\floor}{\lfloor}{\rfloor}
+
+\usepackage{bm}
+\usepackage{booktabs}
+\usepackage{color}
+\newcommand{\comment}[1]{ {\Large\color{red}#1} }
+\renewcommand{\vec}[1]{\bm{#1}}
+
+
+
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Robust combinatorial optimization problems with cardinality constrained uncertainty may be solved by a finite number of nominal problems. In this paper, we show that the number of nominal problems to be solved can be reduced significantly. \\[0.5em]
+\noindent\textbf{Keywords:} robust combinatorial optimization; discrete optimization
+\end{abstract}
+
+
+
+
+
+
+
+\section{Robust combinatorial optimization problem}
+\label{sec:2}
+
+Let $X \subset \{0, 1\}^n$ be a set of feasible solutions of a combinatorial optimization problem. The nominal combinatorial optimization problem of our interest is defined as follows:
+\begin{equation}
+\min_{\vec{x}\in X} \vec{c}^\top \vec{x}
+\end{equation}
+where $\vec{c}^\top \vec{x} = \sum_{j=1}^n c_j x_j$. \citet{Bertsimas2003} considered uncertainty for objective coefficients such that the cost of item $j \in N =\{1,2,\cdots,n\}$ takes a value in the interval $[c_j, c_j + d_j]$, where $d_j \geq 0$. A robust combinatorial optimization problem is considered in the following form:
+\begin{equation} \label{problem}
+Z^* = \min_{\vec{x}\in X} \bigg\{\vec{c}^\top \vec{x} + \max_{\{S|S \subset N, |S| \leq \Gamma\}} \sum_{j \in S} d_j x_j \bigg\}
+\end{equation}
+where at most $\Gamma$ components of the cost coefficients can be $c_j+d_j$; hence, the uncertainty set is called cardinality constrained. The budget of uncertainty $\Gamma$ is a positive integer and represents the risk attitude of decision makers, and $1 \leq \Gamma \leq n$. Without loss of generality, we assume that the indices are sorted in descending order of the size of $d_i$ and define $d_{n+1}=0$ so that 
+\begin{equation}
+	d_1 \geq d_2 \geq \cdots \geq d_n \geq d_{n+1} = 0.
+\end{equation}
+
+\citet{Bertsimas2003} showed that \eqref{problem} is equivalent to
+\begin{equation} \label{bs_dual}
+	Z^* = \min_{\vec{x}\in X, \theta\geq0} \bigg(
+		\Gamma \theta + \vec{c}^\top \vec{x} + \sum_{j\in N} \max(d_j - \theta, 0) x_j 
+	\bigg)
+\end{equation}
+and it can be solved by solving $n+1$ nominal problems. In particular,
+\begin{equation} \label{main}
+Z^* = \min_{l=1,2,\cdots,n+1} G^l,
+\end{equation}
+where for $ l = 1, 2, \dots, n+1$:
+\begin{equation} \label{Gmain}
+G^l = \Gamma d_l + \min_{\vec{x} \in X} \bigg( \vec{c}^\top \vec{x} + \sum_{j=1}^l (d_j - d_l) x_j \bigg)
+\end{equation}
+We let $x_{n+1}=0$, so that \eqref{Gmain} is well-defined. 
+
+This result is very useful, because we can solve the robust optimization problem by solving a finite number of nominal problems. 
+If the nominal problem can be solved in polynomial time, we can also solve the corresponding robust problem in polynomial time. 
+\citet{Park2007} showed that the number of nominal problems to be solved can be reduced to $n-\Gamma+1$, and \citet{Alvarez2013} to $n-\Gamma+2$ independently.
+From the previous paper, they showed that the number of nominal problems to be solved can be further reduced to $\lceil \frac{n-\Gamma}{2} \rceil + 1$.
+Here, we show that the number of nomial problems can be cut down to $\lceil \frac{n-\Gamma}{4} \rceil + 1$ by the heuristic.
+
+\section{Previous Results}
+
+For a feasible solution $\vec{x} \in X$, let 
+\begin{equation}
+G^l (\vec{x}) = \Gamma d_l + \vec{c}^\top \vec{x} + \sum_{j=1}^l (d_j - d_l) x_j \qquad \forall l=1,2,...,n+1
+\end{equation}
+then $G^l$ in \eqref{Gmain} can be written as
+\begin{equation}
+G^l = \min_{\vec{x} \in X} G^l (\vec{x})
+\end{equation}
+We let $G^0(\vec{x})=G^1(\vec{x})$ for notational simplicity. We also define $\vec{x}^l\in X$ such that
+\begin{equation} \label{xldef}
+G^l = G^l(\vec{x}^l) \leq G^l(\vec{x}) \quad \forall \vec{x}\in X
+\end{equation}
+
+
+We first consider $G^{l+1}(\vec{x}) - G^l(\vec{x})$ for $l=1,...,n$ and $\vec{x}\in X$:
+\begin{align}
+G^{l+1}(\vec{x}) - G^l(\vec{x}) 
+&= \Gamma d_{l+1} + \sum_{j=1}^n c_j x_j + \sum_{j=1}^{l+1} (d_j-d_{l+1})x_j \nonumber\\
+&\qquad -  \Gamma d_{l} - \sum_{j=1}^n c_j x_j - \sum_{j=1}^{l} (d_j-d_{l})x_j \nonumber\\
+&= \Gamma (d_{l+1}-d_l) + \sum_{j=1}^l (d_l - d_{l+1}) x_j \nonumber\\
+&= (d_{l+1} - d_l) \bigg( \Gamma - \sum_{j=1}^l x_j \bigg ) \label{diff1}
+\end{align}
+Similarly, we consider for $l=2,...,n+1$ and $\vec{x}\in X$:
+\begin{equation} \label{diff2}
+G^{l}(\vec{x}) - G^{l-1}(\vec{x}) = (d_l - d_{l-1}) \bigg( \Gamma - \sum_{j=1}^{l-1} x_j \bigg )
+\end{equation}
+
+Using \eqref{diff1} and \eqref{diff2}, the following lemmas were provided.
+
+\begin{lemma} \label{lem:prop}
+For $l=1,2,...,n$ and for any $\vec{x}\in X$, the following holds:
+\begin{enumerate}
+
+\item If $\sum_{j=1}^l x_j \leq \Gamma$, then $G^{l-1}(\vec{x}) \geq G^l(\vec{x}) \geq G^{l+1}(\vec{x})$.
+
+\item If $\sum_{j=1}^l x_j > \Gamma$, then $G^{l-1}(\vec{x}) \leq G^l(\vec{x}) \leq G^{l+1}(\vec{x})$.
+
+\end{enumerate}
+\end{lemma}
+
+\begin{lemma} \label{lem:prop3}
+For any $\vec{x}\in X$, we have 
+$
+	G^1(\vec{x}) \geq G^2(\vec{x}) \geq \cdots \geq G^\Gamma(\vec{x}) \geq G^{\Gamma+1} (\vec{x})
+$.
+Furthermore, 
+$
+G^1 \geq G^2 \geq ... \geq G^\Gamma \geq G^{\Gamma+1}
+$.
+\end{lemma}
+
+\begin{lemma} \label{lem:prop5}
+For any $l=1,2,...,n$, we have either $G^l\geq G^{l+1}$ or $G^l\geq G^{l-1}$.
+
+\end{lemma}
+
+\section{New Result}
+The proposition expands the conclusion of Lemma \ref{lem:prop5} as a slightly reduced form.
+
+\begin{lemma} \label{lem:new_prop}
+	Let $x^{l}$ be an optimal solution of $G^{l}$. For any $l \in \{2, \ldots, n-1 \}$,
+	\begin{enumerate}
+		\item If $\sum_{j=1}^{l}{x_{j}} \le \Gamma - 1$ or $\sum_{j=1}^{l-2}{x_{j}} \ge \Gamma$, then $G^{l} \ge G^{l+2}$ or $G^{l} \ge G^{l-2}$.
+		\item Otherwise, $G^{l} \le G^{l+2}$ and $G^{l} \le G^{l-2}$.
+	\end{enumerate}
+\end{lemma}
+\begin{proof}
+	We first consider $G^{l+2}(x) - G^{l}(x)$ and $G^{l-2}(x) - G^{l}(x)$.
+	\begin{center}
+		$G^{l+2}(x) - G^{l}(x) = \{ G^{l+2}(x) - G^{l+1}(x) \} + \{ G^{l+1}(x) - G^{l}(x) \} = (d_{l+2} - d_{l}) \left( \Gamma - \sum\limits_{j=1}^{l}{x_{j}} \right) - x_{l+1}(d_{l+2} - d_{l+1})$.
+	\end{center}
+	Similarly,
+	\begin{center}
+		$G^{l-2}(x) - G^{l}(x) = -(d_{l} - d_{l-2}) \left( \Gamma - \sum\limits_{j=1}^{l-2}{x_{j}} \right) + x_{l-1}(d_{l} - d_{l-1})$.
+	\end{center}
+	Suppose that $\sum_{j=1}^{l}{x_{j}} \le \Gamma - 1$. We obtain
+	\begin{center}
+		$G^{l+2}(x) - G^{l}(x) 
+		= (d_{l+2} - d_{l}) \left( \Gamma - \sum\limits_{j=1}^{l}{x_{j}} \right) - x_{l+1}(d_{l+2} - d_{l+1})
+		\le d_{l+2} - d_{l} + d_{l+1} - d_{l+2} = -(d_{l} - d_{l+1}) \le 0$.
+	\end{center}
+	Thus,
+	\begin{center}
+		$G^{l+2} = G^{l+2}(\vec{x}^{l+2}) \le G^{l+2}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l}) = G^{l}$.
+	\end{center}
+	Also, suppose that $\sum_{j=1}^{l-2}{x_{j}} \ge \Gamma$. It gives
+	\begin{center}
+		$G^{l-2}(x) - G^{l}(x) 
+		= -(d_{l} - d_{l-2}) \left( \Gamma - \sum\limits_{j=1}^{l-2}{x_{j}} \right) + x_{l-1}(d_{l} - d_{l-1})
+		\le 0+0 \le 0$.
+	\end{center}
+	Thus,
+	\begin{center}
+		$G^{l-2} = G^{l-2}(\vec{x}^{l-2}) \le G^{l-2}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l}) = G^{l}$.
+	\end{center}
+	These two statements completes the first part of the proof. 
+	We may assume that $\sum\limits_{j=1}^{l}{x_{j}} \ge \Gamma$ and $\sum\limits_{j=1}^{l-2}{x_{j}} \le \Gamma-1$.
+	Note that $\vec{x}^{l}$ is a binary vector. There are only 3 cases which satisfy the assumption;
+	\begin{center}
+		$\left( \sum\limits_{j=1}^{l-2}{x_{j}}, \sum\limits_{j=1}^{l}{x_{j}}  \right) \in \{ (\Gamma - 2, \Gamma), (\Gamma - 1, \Gamma), (\Gamma - 1, \Gamma + 1) \}$
+	\end{center}
+	since the difference between two series is at most 2.
+	\begin{enumerate}
+		\item If $\left( \sum\limits_{j=1}^{l-2}{x_{j}}, \sum\limits_{j=1}^{l}{x_{j}}  \right) = (\Gamma - 2, \Gamma)$,
+		\begin{enumerate}
+			\item $G^{l+2}(\vec{x}) - G^{l}(\vec{x}) = (d_{l+2} - d_{l}) \left( \Gamma - \sum\limits_{j=1}^{l}{x_{j}} \right) - x_{l+1}(d_{l+2} - d_{l+1}) = x_{l+1}(d_{l+1} - d_{l+2}) \ge 0$. Then,
+			\begin{center}
+				$G^{l} = G^{l}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l+2}) \le G^{l+2}(\vec{x}^{l+2}) = G^{l+2}$.
+			\end{center}
+			\item $G^{l-2}(\vec{x}) - G^{l}(\vec{x}) = -(d_{l} - d_{l-2}) \left( \Gamma - \sum\limits_{j=1}^{l-2}{x_{j}} \right) + x_{l-1}(d_{l} - d_{l-1}) = 2d_{l-2} - 2d_{l} + x_{l-1}(d_{l} - d_{l-1}) \ge 2d_{l-2} - 2d_{l} + d_{l} - d_{l-1} = (d_{l-2} - d_{l-1}) + (d_{l-2} - d_{l}) \ge 0$. Then,
+			\begin{center}
+				$G^{l} = G^{l}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l-2}) \le G^{l-2}(\vec{x}^{l-2}) = G^{l-2}$.
+			\end{center}
+		\end{enumerate}
+		\item If $\left( \sum\limits_{j=1}^{l-2}{x_{j}}, \sum\limits_{j=1}^{l}{x_{j}}  \right) = (\Gamma - 1, \Gamma)$,
+		\begin{enumerate}
+			\item $G^{l+2}(\vec{x}) - G^{l}(\vec{x}) = (d_{l+2} - d_{l}) \left( \Gamma - \sum\limits_{j=1}^{l}{x_{j}} \right) - x_{l+1}(d_{l+2} - d_{l+1}) = x_{l+1}(d_{l+1} - d_{l+2}) \ge 0$. Then,
+			\begin{center}
+				$G^{l} = G^{l}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l+2}) \le G^{l+2}(\vec{x}^{l+2}) = G^{l+2}$.
+			\end{center}
+			\item $G^{l-2}(\vec{x}) - G^{l}(\vec{x}) = -(d_{l} - d_{l-2}) \left( \Gamma - \sum\limits_{j=1}^{l-2}{x_{j}} \right) + x_{l-1}(d_{l} - d_{l-1}) =  d_{l-2} - d_{l} + x_{l-1}(d_{l} - d_{l-1}) \ge d_{l-2} - d_{l} + d_{l} - d_{l-1} = (d_{l-2} - d_{l-1}) \ge 0$. Then,
+			\begin{center}
+				$G^{l} = G^{l}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l-2}) \le G^{l-2}(\vec{x}^{l-2}) = G^{l-2}$.
+			\end{center}
+		\end{enumerate}
+		\item If $\left( \sum\limits_{j=1}^{l-2}{x_{j}}, \sum\limits_{j=1}^{l}{x_{j}}  \right) = (\Gamma - 1, \Gamma+1)$,
+		\begin{enumerate}
+			\item $G^{l+2}(\vec{x}) - G^{l}(\vec{x}) = (d_{l+2} - d_{l}) \left( \Gamma - \sum\limits_{j=1}^{l}{x_{j}} \right) - x_{l+1}(d_{l+2} - d_{l+1}) = (d_{l} - d_{l+2}) + x_{l+1}(d_{l+1} - d_{l+2}) \ge 0$. Then,
+			\begin{center}
+				$G^{l} = G^{l}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l+2}) \le G^{l+2}(\vec{x}^{l+2}) = G^{l+2}$.
+			\end{center}
+			\item $G^{l-2}(\vec{x}) - G^{l}(\vec{x}) = -(d_{l} - d_{l-2}) \left( \Gamma - \sum\limits_{j=1}^{l-2}{x_{j}} \right) + x_{l-1}(d_{l} - d_{l-1}) =  d_{l-2} - d_{l} + x_{l-1}(d_{l} - d_{l-1}) \ge d_{l-2} - d_{l} + d_{l} - d_{l-1} = (d_{l-2} - d_{l-1}) \ge 0$. Then,
+			\begin{center}
+				$G^{l} = G^{l}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l-2}) \le G^{l-2}(\vec{x}^{l-2}) = G^{l-2}$.
+			\end{center}
+		\end{enumerate}
+	\end{enumerate}
+	These cases end the rest of the proof.
+\end{proof}
+
+\section{New Strategies on searching the Optimal Solution}
+Firstly, we may ignore some partial problems by the status of some problems by lemma \ref{lem:new_prop}.
+
+\textbf{Algorithm to find the optimal solution}
+\begin{enumerate}
+	\item $r=1, L = \{ G^{\Gamma + 1}, G^{\Gamma + 3}, G^{\Gamma + 5}, \ldots, G^{\Gamma + \gamma}, G^{n+1} \}$ where $\gamma = \max\{{2n+1 : \Gamma + 2n + 1 < n+1, n \in \mathbb{N}} \}$.
+	\item Find $\vec{x}^{\Gamma + 4r - 1}$, the optimal solution of $G^{\Gamma + 4r - 1}$.
+	\item If $\vec{x}^{\Gamma + 4r - 1}$ satisfies lemma \ref{lem:new_prop}-2, remove $4r-3$ and $4r+1$ from $L$.
+	\item Erase $G^{\Gamma + 4r - 1}$ from $L$, increase $r$ by 1 and repeat it from 2 until $\Gamma + 4r-1 < n+1$.
+	\item Evaluate the rest partial problems in $L$.
+\end{enumerate}
+We may intuitively ignore the cases which satisfy the lemma \ref{lem:new_prop}, because there are only 3 cases among numerous cases.
+
+\textbf{Algorithm to find the optimal solution}
+\begin{enumerate}
+	\item $L = \{ G^{\Gamma + 1}, G^{\Gamma + 3}, G^{\Gamma + 5}, \ldots, G^{\Gamma + \gamma}, G^{n+1} \}$ where $\gamma = \max\{{2n+1 : \Gamma + 2n + 1 < n+1, n \in \mathbb{N}} \}$.
+	\item Remove $G^{\Gamma + 4k - 3}$ from $L$ for every possible $k \in \mathbb{N}$.
+	\item Evaluate the problems in $L$.
+\end{enumerate}
+We tried to find the case which satisfies the second part of lemma \ref{lem:new_prop}, but there was no such case, whatever $n$ or $\Gamma$ are.
+It may conclude that we can find the optimal solution with this heuristic, with a very high chance.
+Also, this result implies that the algorithm using lemma \ref{lem:new_prop} will work as similar as the traditional one,
+since there is no case taht the third step of algorithm removes the neighbors.
+
+\section{Concluding Remarks}
+In this proposition, we could find the heuristic which search the optimal solution before long than the previous alogrithm.
+The number of searches the algorithm performs becomes the half, $\lceil \frac{n - \Gamma}{4} \rceil + 1$.
+
+
+
+
+
+%\bibliographystyle{plainnat}
+\bibliographystyle{apalike}
+\bibliography{rsp}
+
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+%
+
