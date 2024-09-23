@@ -42,13 +42,11 @@
 \renewcommand\Affilfont{\rm\small}
 
 \title{A Strategy for solving the Robust Combinatorial Optimization Problems with Cardinality Constrained Uncertainty}
-\author{Taehan Lee\\
-	Department of Industrial and Information Systems Engineering\\
-	Chonbuk National University, Korea\\
+\author{
+    Sangwoo Cho\footnote{Corresponding Author: \email{jswself@kaist.ac.kr}}\\Department of Industrial and SystemsEngineering\\KAIST, Daejeon, Korea\\
     \and
-    Changhyun Kwon\footnote{Corresponding Author: \email{chkwon@buffalo.edu}}\\Department of Industrial and Systems Engineering\\University at Buffalo, SUNY, USA\\
-	\and
-	Sangwoo Cho\footnote{Corresponding Author: \email{jswself@kaist.ac.kr}}\\Department of Industrial Systems and Engineering\\Korea Advanced Institute of Science and Technology, Daejeon, Korea}
+    Changhyun Kwon\footnote{Corresponding Author: \email{chkwon@kaist.ac.kr}}\\Department of Industrial and Systems Engineering\\KAIST, Daejeon, Korea
+    }
 \date{September 23, 2024}
 
 %\usepackage{showlabels} 
@@ -198,41 +196,58 @@ The proposition expands the conclusion of Lemma \ref{lem:prop5} as a slightly re
 	\end{enumerate}
 \end{lemma}
 \begin{proof}
-	We first consider $G^{l+2}(x) - G^{l}(x)$ and $G^{l-2}(x) - G^{l}(x)$.
-	\begin{center}
-		$G^{l+2}(x) - G^{l}(x) = \{ G^{l+2}(x) - G^{l+1}(x) \} + \{ G^{l+1}(x) - G^{l}(x) \} = (d_{l+2} - d_{l}) \left( \Gamma - \sum\limits_{j=1}^{l}{x_{j}} \right) - x_{l+1}(d_{l+2} - d_{l+1})$.
-	\end{center}
+	1. We first consider $G^{l+2}(x) - G^{l}(x)$ and then, $G^{l-2}(x) - G^{l}(x)$. We have \rednote{Need to use vector notation $\vec{x}$...}
+	\begin{align*}
+		G^{l+2}(x) - G^{l}(x) 
+		& = \{ G^{l+2}(x) - G^{l+1}(x) \} + \{ G^{l+1}(x) - G^{l}(x) \} \\
+		& = (d_{l+2} - d_{l}) \left( \Gamma - \sum\limits_{j=1}^{l}{x_{j}} \right) - x_{l+1}(d_{l+2} - d_{l+1}).
+	\end{align*}
 	Similarly,
-	\begin{center}
-		$G^{l-2}(x) - G^{l}(x) = -(d_{l} - d_{l-2}) \left( \Gamma - \sum\limits_{j=1}^{l-2}{x_{j}} \right) + x_{l-1}(d_{l} - d_{l-1})$.
-	\end{center}
+	\[
+		G^{l-2}(x) - G^{l}(x) = -(d_{l} - d_{l-2}) \left( \Gamma - \sum\limits_{j=1}^{l-2}{x_{j}} \right) + x_{l-1}(d_{l} - d_{l-1}).
+	\]
 	Suppose that $\sum_{j=1}^{l}{x_{j}} \le \Gamma - 1$. We obtain
-	\begin{center}
-		$G^{l+2}(x) - G^{l}(x) 
-		= (d_{l+2} - d_{l}) \left( \Gamma - \sum\limits_{j=1}^{l}{x_{j}} \right) - x_{l+1}(d_{l+2} - d_{l+1})
-		\le d_{l+2} - d_{l} + d_{l+1} - d_{l+2} = -(d_{l} - d_{l+1}) \le 0$.
-	\end{center}
+	\begin{align*}
+		G^{l+2}(x) - G^{l}(x) 
+		&= (d_{l+2} - d_{l}) \left( \Gamma - \sum\limits_{j=1}^{l}{x_{j}} \right) - x_{l+1}(d_{l+2} - d_{l+1}) \\
+		&\le d_{l+2} - d_{l} + d_{l+1} - d_{l+2} \\
+		&= -(d_{l} - d_{l+1}) \\
+		&\le 0.
+	\end{align*}
 	Thus,
-	\begin{center}
-		$G^{l+2} = G^{l+2}(\vec{x}^{l+2}) \le G^{l+2}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l}) = G^{l}$.
-	\end{center}
+	\[
+		G^{l+2} = G^{l+2}(\vec{x}^{l+2}) \le G^{l+2}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l}) = G^{l}.
+	\]
 	Also, suppose that $\sum_{j=1}^{l-2}{x_{j}} \ge \Gamma$. It gives
-	\begin{center}
-		$G^{l-2}(x) - G^{l}(x) 
-		= -(d_{l} - d_{l-2}) \left( \Gamma - \sum\limits_{j=1}^{l-2}{x_{j}} \right) + x_{l-1}(d_{l} - d_{l-1})
-		\le 0+0 \le 0$.
-	\end{center}
+	\begin{align*}
+		G^{l-2}(x) - G^{l}(x) 
+		&= -(d_{l} - d_{l-2}) \left( \Gamma - \sum\limits_{j=1}^{l-2}{x_{j}} \right) + x_{l-1}(d_{l} - d_{l-1}) \\
+		&\le 0+0 \le 0.
+	\end{align*}
 	Thus,
-	\begin{center}
-		$G^{l-2} = G^{l-2}(\vec{x}^{l-2}) \le G^{l-2}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l}) = G^{l}$.
-	\end{center}
-	These two statements completes the first part of the proof. 
-	We may assume that $\sum\limits_{j=1}^{l}{x_{j}} \ge \Gamma$ and $\sum\limits_{j=1}^{l-2}{x_{j}} \le \Gamma-1$.
-	Note that $\vec{x}^{l}$ is a binary vector. There are only 3 cases which satisfy the assumption;
-	\begin{center}
-		$\left( \sum\limits_{j=1}^{l-2}{x_{j}}, \sum\limits_{j=1}^{l}{x_{j}}  \right) \in \{ (\Gamma - 2, \Gamma), (\Gamma - 1, \Gamma), (\Gamma - 1, \Gamma + 1) \}$
-	\end{center}
-	since the difference between two series is at most 2.
+	\[
+		G^{l-2} = G^{l-2}(\vec{x}^{l-2}) \le G^{l-2}(\vec{x}^{l}) \le G^{l}(\vec{x}^{l}) = G^{l}.
+	\]
+	These two statements complete the first part of the proof. 
+
+	\rednote{
+		From the proof written above, the correct statement is:
+		
+		\begin{enumerate}
+		\item If $\sum_{j=1}^{l}{x_{j}} \le \Gamma - 1$, then $G^{l} \ge G^{l+2}$.
+		\item If $\sum_{j=1}^{l-2}{x_{j}} \ge \Gamma$, then $G^{l} \ge G^{l-2}$.
+		\item Otherwise.... 
+		\end{enumerate}
+	}
+
+
+	2.
+	We assume that $\sum\limits_{j=1}^{l}{x_{j}} \ge \Gamma$ and $\sum\limits_{j=1}^{l-2}{x_{j}} \le \Gamma-1$.
+	Note that $\vec{x}^{l}$ is a binary vector. There are only 3 cases that satisfy the assumption;
+	\[
+		\left( \sum\limits_{j=1}^{l-2}{x_{j}}, \sum\limits_{j=1}^{l}{x_{j}}  \right) \in \bigg\{ (\Gamma - 2, \Gamma), (\Gamma - 1, \Gamma), (\Gamma - 1, \Gamma + 1) \bigg\}
+	\]
+	since the difference between the two series is at most 2.
 	\begin{enumerate}
 		\item If $\left( \sum\limits_{j=1}^{l-2}{x_{j}}, \sum\limits_{j=1}^{l}{x_{j}}  \right) = (\Gamma - 2, \Gamma)$,
 		\begin{enumerate}
